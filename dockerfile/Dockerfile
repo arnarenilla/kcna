@@ -1,13 +1,12 @@
-FROM centos
-MAINTAINER Sander <mail@sandervanvugt.nl>
+FROM almalinux:8
 
-# Add repo file
-ADD ./sander.repo /etc/yum.repos.d/
+LABEL maintainer="Sander <mail@sandervanvugt.nl>"
 
-# Install cool software
-RUN yum --assumeyes update && \
-yum --assumeyes install bash nmap iproute && \
-yum clean all
+COPY sander.repo /etc/yum.repos.d/
+
+RUN dnf -y update && \
+    dnf -y install bash nmap iproute && \
+    dnf clean all
 
 ENTRYPOINT ["/usr/bin/nmap"]
-CMD ["-sn", "172.17.0.0/24"] 
+CMD ["-sn", "172.17.0.0/24"]
